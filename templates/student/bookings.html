@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings - RoomieConnect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      color: #2d3748;
+      margin: 0;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+    
+    /* Animated background elements */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+      animation: float 20s infinite linear;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      border-radius: 24px 24px 0 0;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      animation: slideDown 0.8s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from { 
+        opacity: 0; 
+        transform: translateY(-30px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+      }
+    }
+    
+    .booking-list {
+      display: grid;
+      gap: 2rem;
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+    
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(40px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+      }
+    }
+    
+    .booking-card {
+      border: 2px solid rgba(230, 235, 241, 0.8);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .booking-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(118, 75, 162, 0.03));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .booking-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+      border-color: rgba(102, 126, 234, 0.3);
+    }
+    
+    .booking-card:hover::before {
+      opacity: 1;
+    }
+    
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .booking-header strong {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2d3748;
+    }
+    
+    .status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .status::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+    
+    .status-pending { 
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      color: #856404;
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+    }
+    
+    .status-pending::before {
+      background: #856404;
+    }
+    
+    .status-approved { 
+      background: linear-gradient(135deg, #d4edda, #a8e6cf);
+      color: #155724;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    .status-approved::before {
+      background: #155724;
+    }
+    
+    .status-rejected { 
+      background: linear-gradient(135deg, #f8d7da, #ff9ff3);
+      color: #721c24;
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    }
+    
+    .status-rejected::before {
+      background: #721c24;
+    }
+    
+    .details {
+      font-size: 1rem;
+      color: #4a5568;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .details strong { 
+      color: #2d3748; 
+      font-weight: 600;
+    }
+    
+    .detail-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .detail-icon {
+      font-size: 1.2rem;
+      margin-right: 0.8rem;
+      width: 24px;
+      display: inline-block;
+    }
+    
+    .view-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .view-link:hover {
+      transform: translateX(5px);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+      border-color: rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .no-bookings {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #718096;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      border-radius: 20px;
+      border: 2px dashed #cbd5e0;
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+    
+    .no-bookings::before {
+      content: '📋';
+      display: block;
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      .container {
+        padding: 2rem 1.5rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .booking-card {
+        padding: 1.5rem;
+      }
+      
+      .booking-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      
+      .status {
+        align-self: flex-end;
+      }
+      
+      .details {
+        font-size: 0.9rem;
+      }
+      
+      .view-link {
+        margin-top: 1rem;
+        padding: 0.6rem 1.2rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .booking-card {
+        padding: 1.2rem;
+      }
+      
+      .details {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📋 My Bookings</h1>
+    {% if bookings %}
+      <div class="booking-list">
+        {% for booking in bookings %}
+          <div class="booking-card">
+            <div class="booking-header">
+              <div><strong>Booking #{{ booking.id }}</strong></div>
+              <div class="status status-{{ booking.status|lower }}">{{ booking.status|capitalize }}</div>
+            </div>
+            <div class="details">
+              <div class="detail-row">
+                <span class="detail-icon">🏠</span>
+                <span><strong>Room ID:</strong> {{ booking.room_id }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-icon">📅</span>
+                <span><strong>Date:</strong> {{ booking.created_at or "N/A" }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-icon">💬</span>
+                <span><strong>Message:</strong> {{ booking.message or "No message" }}</span>
+              </div>
+            </div>
+            <a href="/room/{{ booking.room_id }}" class="view-link">👁️ View Room</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="no-bookings">
+        You have no booking requests yet.
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Owner Profile - RoomieConnect</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo h1 {
+      color: #006A4E;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .logo p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #006A4E;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    label .required {
+      color: #e74c3c;
+      margin-left: 2px;
+    }
+
+    input[type="text"], 
+    input[type="file"], 
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    input[type="text"]:focus, 
+    textarea:focus {
+      outline: none;
+      border-color: #006A4E;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(0, 106, 78, 0.1);
+    }
+
+    input[type="file"] {
+      background: white;
+      border: 2px dashed #006A4E;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    input[type="file"]:hover {
+      border-color: #008B5A;
+      background: #f0f8f5;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-family: inherit;
+    }
+
+    .char-counter {
+      font-size: 0.8rem;
+      color: #666;
+      text-align: right;
+      margin-top: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #006A4E 0%, #008B5A 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #008B5A 0%, #006A4E 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 106, 78, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .form-hint {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #e1e8ed;
+      border-radius: 3px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #006A4E, #008B5A);
+      width: 75%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .icon-input {
+      position: relative;
+    }
+
+    .icon-input i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      z-index: 1;
+    }
+
+    .icon-input input {
+      padding-left: 45px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        margin: 10px;
+        border-radius: 16px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .logo h1 {
+        font-size: 1.8rem;
+      }
+
+      input[type="text"], 
+      input[type="file"], 
+      textarea {
+        padding: 12px;
+        font-size: 0.95rem;
+      }
+
+      button {
+        padding: 15px;
+        font-size: 1rem;
+      }
+    }
+
+    /* File upload styling */
+    .file-upload-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-upload-text {
+      pointer-events: none;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .file-upload-icon {
+      font-size: 1.5rem;
+      color: #006A4E;
+      margin-bottom: 10px;
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .loading button {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1><i class="fas fa-home"></i> RoomieConnect</h1>
+      <p>Your trusted room finding platform</p>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+
+    <h2>Complete Your Owner Profile</h2>
+    
+    <form method="POST" enctype="multipart/form-data" id="ownerProfileForm">
+      <input type="hidden" name="user_id" value="{{ user_id }}">
+      
+      <div class="form-group">
+        <label>Phone Number <span class="required">*</span></label>
+        <div class="icon-input">
+          <i class="fas fa-phone"></i>
+          <input type="text" name="phone" placeholder="03XX-XXXXXXX" required>
+        </div>
+        <div class="form-hint">Enter your active phone number for verification</div>
+      </div>
+
+      <div class="form-group">
+        <label>CNIC Number <span class="required">*</span></label>
+        <div class="icon-input">
+          <i class="fas fa-id-card"></i>
+          <input type="text" name="cnic" placeholder="12345-1234567-1" required>
+        </div>
+        <div class="form-hint">Enter your 13-digit CNIC number with dashes</div>
+      </div>
+
+      <div class="form-group">
+        <label>Short Bio</label>
+        <textarea name="bio" rows="4" placeholder="Write something about yourself as a property owner..." maxlength="500"></textarea>
+        <div class="char-counter">
+          <span id="charCount">0</span>/500 characters
+        </div>
+        <div class="form-hint">Tell potential tenants about your properties and yourself</div>
+      </div>
+
+      <div class="form-group">
+        <label>Profile Picture <span class="required">*</span></label>
+        <div class="file-upload-wrapper">
+          <input type="file" name="profile_picture" accept="image/*" required id="profilePicture">
+          <div class="file-upload-text">
+            <i class="fas fa-cloud-upload-alt file-upload-icon"></i><br>
+            Click to upload your profile picture
+          </div>
+        </div>
+        <div class="form-hint">Upload a clear photo of yourself (JPG, PNG, max 5MB)</div>
+      </div>
+
+      <button type="submit" id="submitBtn">
+        <i class="fas fa-check"></i> Complete Profile
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Character counter for bio
+    const bioTextarea = document.querySelector('textarea[name="bio"]');
+    const charCount = document.getElementById('charCount');
+    
+    bioTextarea.addEventListener('input', function() {
+      const count = this.value.length;
+      charCount.textContent = count;
+      
+      if (count > 450) {
+        charCount.style.color = '#e74c3c';
+      } else {
+        charCount.style.color = '#666';
+      }
+    });
+
+    // File upload preview
+    const fileInput = document.getElementById('profilePicture');
+    const fileText = document.querySelector('.file-upload-text');
+    
+    fileInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        const fileName = this.files[0].name;
+        fileText.innerHTML = `
+          <i class="fas fa-check-circle" style="color: #006A4E; font-size: 1.5rem; margin-bottom: 10px;"></i><br>
+          ${fileName}
+        `;
+      }
+    });
+
+    // Form validation and submission
+    document.getElementById('ownerProfileForm').addEventListener('submit', function(e) {
+      const submitBtn = document.getElementById('submitBtn');
+      const container = document.querySelector('.container');
+      
+      // Add loading state
+      container.classList.add('loading');
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Profile...';
+      
+      // Basic validation
+      const phone = document.querySelector('input[name="phone"]').value;
+      const cnic = document.querySelector('input[name="cnic"]').value;
+      
+      // Phone validation
+      const phonePattern = /^03\d{2}-\d{7}$/;
+      if (!phonePattern.test(phone)) {
+        e.preventDefault();
+        alert('Please enter a valid phone number in format: 03XX-XXXXXXX');
+        container.classList.remove('loading');
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Complete Profile';
+        return;
+      }
+      
+      // CNIC validation
+      const cnicPattern = /^\d{5}-\d{7}-\d{1}$/;
+      if (!cnicPattern.test(cnic)) {
+        e.preventDefault();
+        alert('Please enter a valid CNIC number in format: 12345-1234567-1');
+        container.classList.remove('loading');
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Complete Profile';
+        return;
+      }
+    });
+
+    // Auto-format phone number
+    document.querySelector('input[name="phone"]').addEventListener('input', function() {
+      let value = this.value.replace(/\D/g, '');
+      if (value.length >= 4) {
+        value = value.substring(0, 4) + '-' + value.substring(4, 11);
+      }
+      this.value = value;
+    });
+
+    // Auto-format CNIC
+    document.querySelector('input[name="cnic"]').addEventListener('input', function() {
+      let value = this.value.replace(/\D/g, '');
+      if (value.length >= 5) {
+        value = value.substring(0, 5) + '-' + value.substring(5, 13);
+        if (value.length >= 13) {
+          value = value.substring(0, 13) + '-' + value.substring(13, 14);
+        }
+      }
+      this.value = value;
+    });
+  </script>
+</body>
+</html>

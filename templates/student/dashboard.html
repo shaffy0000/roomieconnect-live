@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - RoomieConnect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #1a202c;
+      line-height: 1.6;
+    }
+
+    /* Header Styling */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 1.75rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .profile {
+      background: linear-gradient(135deg, #38a169, #2f855a);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 10px rgba(56, 161, 105, 0.3);
+    }
+
+    /* Main Content */
+    main {
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Filter Form */
+    .filter-form {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-form input, 
+    .filter-form select {
+      padding: 0.875rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      background: white;
+      font-family: inherit;
+    }
+
+    .filter-form input:focus, 
+    .filter-form select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .filter-form input::placeholder {
+      color: #a0aec0;
+    }
+
+    /* Checkbox Styling */
+    .checkbox-group {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-item:hover {
+      transform: translateY(-2px);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+      cursor: pointer;
+    }
+
+    .checkbox-item label {
+      font-weight: 500;
+      color: #4a5568;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Filter Button */
+    .filter-button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .filter-button:active {
+      transform: translateY(0);
+    }
+
+    /* Property List Grid */
+    .property-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Property Card */
+    .property-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    .property-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .property-card:hover::before {
+      opacity: 1;
+    }
+
+    .property-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .property-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .property-card:hover .property-image {
+      transform: scale(1.05);
+    }
+
+    .property-info {
+      padding: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .property-info h3 {
+      margin: 0 0 0.5rem;
+      color: #2d3748;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .property-location {
+      color: #718096;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .property-location::before {
+      content: '📍';
+      font-size: 0.8rem;
+    }
+
+    .property-price {
+      font-weight: 700;
+      color: #38a169;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .property-price::before {
+      content: '💰';
+      font-size: 0.9rem;
+    }
+
+    .property-description {
+      color: #4a5568;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Action Buttons Section */
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 15px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      min-width: 180px;
+      justify-content: center;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .action-btn:active {
+      transform: translateY(0);
+    }
+
+    .action-btn.bookings {
+      background: linear-gradient(135deg, #38a169, #2f855a);
+      box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
+    }
+
+    .action-btn.bookings:hover {
+      box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4);
+    }
+
+    .action-btn.notifications {
+      background: linear-gradient(135deg, #ed8936, #dd6b20);
+      box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3);
+    }
+
+    .action-btn.notifications:hover {
+      box-shadow: 0 6px 20px rgba(237, 137, 54, 0.4);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .header-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+
+      .filter-form {
+        padding: 1.5rem;
+      }
+
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .checkbox-group {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .property-list {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .action-btn {
+        min-width: auto;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .filter-form {
+        padding: 1rem;
+      }
+
+      .property-card {
+        margin: 0;
+      }
+
+      .property-info {
+        padding: 1rem;
+      }
+
+      .header-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #718096;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 2rem;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #4a5568;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .property-card {
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .property-card:nth-child(even) {
+      animation-delay: 0.1s;
+    }
+
+    .property-card:nth-child(3n) {
+      animation-delay: 0.2s;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">RoomieConnect</div>
+  <div class="header-actions">
+    <a href="{{ url_for('student_bookings') }}" class="header-btn bookings">
+      📋 My Bookings
+    </a>
+    <a href="{{ url_for('messages_inbox') }}" class="header-btn">💬 Messages</a>
+    <a href="{{ url_for('student_notifications') }}" class="header-btn notifications">
+      🔔 Notifications
+    </a>
+    <div class="profile">Student Dashboard</div>
+  </div>
+</header>
+
+<main>
+  <form method="get" class="filter-form">
+    <div class="filter-grid">
+      <input type="text" name="city" placeholder="🏙️ Enter City" value="{{ filters.city or '' }}">
+      <input type="number" name="min_price" placeholder="💰 Min Price (PKR)" value="{{ filters.min_price or '' }}">
+      <input type="number" name="max_price" placeholder="💰 Max Price (PKR)" value="{{ filters.max_price or '' }}">
+      <select name="gender">
+        <option value="">👥 Any Gender</option>
+        <option value="male" {% if filters.gender == 'male' %}selected{% endif %}>👨 Male</option>
+        <option value="female" {% if filters.gender == 'female' %}selected{% endif %}>👩 Female</option>
+      </select>
+    </div>
+    
+    <div class="checkbox-group">
+      <div class="checkbox-item">
+        <input type="checkbox" name="wifi" value="1" id="wifi" {% if filters.wifi %}checked{% endif %}>
+        <label for="wifi">📶 WiFi Available</label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" name="furnished" value="1" id="furnished" {% if filters.furnished %}checked{% endif %}>
+        <label for="furnished">🛋️ Furnished</label>
+      </div>
+    </div>
+    
+    <button type="submit" class="filter-button">🔍 Search Rooms</button>
+  </form>
+
+  <div class="property-list">
+    {% for room in rooms %}
+    <a href="{{ url_for('view_room', room_id=room.id) }}" class="property-link">
+      <div class="property-card" data-room-id="{{ room.id }}">
+        {% if room.image_url %}
+          <img src="{{ room.image_url }}" alt="{{ room.title }}" class="property-image">
+        {% endif %}
+        <div class="property-info">
+          <h3>{{ room.title }}</h3>
+          <p class="property-location">{{ room.city }}{% if room.area %}, {{ room.area }}{% endif %}</p>
+          <p class="property-price">PKR {{ room.rent_amount }}</p>
+          <p class="property-description">{{ room.description }}</p>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if not rooms %}
+  <div class="empty-state">
+    <h3>🏠 No rooms found</h3>
+    <p>Try adjusting your filters to find the perfect room for you!</p>
+  </div>
+  {% endif %}
+
+  <!-- Alternative Action Buttons Section (if you prefer them at the bottom) -->
+  <div class="action-buttons">
+    <a href="{{ url_for('student_bookings') }}" class="action-btn bookings">
+      📋 My Bookings
+    </a>
+    <a href="{{ url_for('student_notifications') }}" class="action-btn notifications">
+      🔔 Notifications
+    </a>
+  </div>
+</main>
+
+<script>
+  // Enhanced click functionality with smooth animations
+  document.querySelectorAll('.property-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Add ripple effect
+      const ripple = document.createElement('div');
+      const rect = card.getBoundingClientRect();
+      const size = 60;
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        background: rgba(102, 126, 234, 0.3);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: scale(0);
+        animation: ripple 0.6s ease-out;
+        left: ${x}px;
+        top: ${y}px;
+      `;
+      
+      card.style.position = 'relative';
+      card.appendChild(ripple);
+      
+      // Log room info
+      const roomTitle = card.querySelector('h3').textContent;
+      const roomId = card.dataset.roomId;
+      console.log('Clicked room:', roomTitle, 'ID:', roomId);
+      
+      // Remove ripple after animation
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    });
+  });
+
+  // Add ripple animation keyframes
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes ripple {
+      to {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Form submission with loading state
+  const form = document.querySelector('.filter-form');
+  const button = document.querySelector('.filter-button');
+  
+  form.addEventListener('submit', function(e) {
+    button.innerHTML = '⏳ Searching...';
+    button.disabled = true;
+    
+    // Re-enable button after 2 seconds (in case of slow loading)
+    setTimeout(() => {
+      button.innerHTML = '🔍 Search Rooms';
+      button.disabled = false;
+    }, 2000);
+  });
+
+  // Add smooth scrolling to form when focused
+  document.querySelectorAll('.filter-form input, .filter-form select').forEach(input => {
+    input.addEventListener('focus', function() {
+      this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Back - RoomieConnect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Dynamic background elements */
+    .bg-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: drift 8s ease-in-out infinite;
+    }
+
+    .floating-shape:nth-child(1) {
+      width: 100px;
+      height: 100px;
+      top: 15%;
+      left: 15%;
+      animation-delay: 0s;
+    }
+
+    .floating-shape:nth-child(2) {
+      width: 150px;
+      height: 150px;
+      top: 70%;
+      right: 10%;
+      animation-delay: 3s;
+    }
+
+    .floating-shape:nth-child(3) {
+      width: 80px;
+      height: 80px;
+      bottom: 25%;
+      left: 25%;
+      animation-delay: 6s;
+    }
+
+    .floating-shape:nth-child(4) {
+      width: 120px;
+      height: 120px;
+      top: 45%;
+      right: 30%;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes drift {
+      0%, 100% { 
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 0.1;
+      }
+      25% { 
+        transform: translateX(20px) translateY(-15px) rotate(90deg);
+        opacity: 0.2;
+      }
+      50% { 
+        transform: translateX(-10px) translateY(-25px) rotate(180deg);
+        opacity: 0.15;
+      }
+      75% { 
+        transform: translateX(-20px) translateY(-10px) rotate(270deg);
+        opacity: 0.25;
+      }
+    }
+
+    /* Main container */
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 10;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: slideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Header section */
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .welcome-back {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    .brand-logo {
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.8rem;
+      position: relative;
+      animation: brandPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes brandPulse {
+      0%, 100% { 
+        filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.3));
+        transform: scale(1);
+      }
+      50% { 
+        filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6));
+        transform: scale(1.02);
+      }
+    }
+
+    .tagline {
+      color: #64748b;
+      font-size: 1rem;
+      font-weight: 500;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Form styling */
+    .login-form {
+      animation: fadeInUp 1s ease-out 0.9s both;
+    }
+
+    .input-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 1.1rem 1.3rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .input-field:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    /* Password field with eye icon */
+    .password-container {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+
+    /* Login button */
+    .login-btn {
+      width: 100%;
+      padding: 1.2rem 2rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .login-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .login-btn:hover::before {
+      left: 100%;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+    }
+
+    .login-btn:active {
+      transform: translateY(-1px);
+    }
+
+    /* Forgot password link */
+    .forgot-password {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+
+    .forgot-password a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .forgot-password a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 50%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .forgot-password a:hover::after {
+      width: 100%;
+    }
+
+    .forgot-password a:hover {
+      color: #764ba2;
+    }
+
+    /* Signup link */
+    .signup-link {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(226, 232, 240, 0.6);
+      animation: fadeInUp 1s ease-out 1.2s both;
+    }
+
+    .signup-link p {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .signup-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .signup-link a:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Loading state */
+    .loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .login-container {
+        margin: 1rem;
+        padding: 2rem 1.5rem;
+      }
+
+      .brand-logo {
+        font-size: 1.8rem;
+      }
+
+      .welcome-back {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Enhanced accessibility */
+    .input-field:focus-visible, .login-btn:focus-visible {
+      outline: 2px solid #667eea;
+      outline-offset: 2px;
+    }
+
+    /* Success animation */
+    @keyframes success {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .success-animation {
+      animation: success 0.6s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-elements">
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="header">
+      <div class="brand-logo">RoomieConnect</div>
+      <div class="welcome-back">Welcome Back!</div>
+      <div class="tagline">Sign in to find your perfect room</div>
+    </div>
+
+    <form action="/login" method="POST" id="loginForm" class="login-form">
+      <div class="input-group">
+        <label for="email" class="input-label">Email Address</label>
+        <input type="email" id="email" name="email" class="input-field" required placeholder="Enter your email">
+      </div>
+
+      <div class="input-group">
+        <label for="password" class="input-label">Password</label>
+        <div class="password-container">
+          <input type="password" id="password" name="password" class="input-field" required placeholder="Enter your password">
+          <button type="button" class="password-toggle" onclick="togglePassword()">
+            <span id="eyeIcon">👁️</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="forgot-password">
+        <a href="/forgot-password">Forgot your password?</a>
+      </div>
+
+      <button type="submit" class="login-btn" id="loginBtn">
+        Sign In
+      </button>
+    </form>
+
+    <div class="signup-link">
+      <p>Don't have an account?</p>
+      <a href="/signup">Create Account</a>
+    </div>
+  </div>
+
+  <script>
+    // Password toggle functionality
+    function togglePassword() {
+      const passwordField = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.textContent = '🙈';
+      } else {
+        passwordField.type = 'password';
+        eyeIcon.textContent = '👁️';
+      }
+    }
+
+    // Form submission handling
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      const loginBtn = document.getElementById('loginBtn');
+      loginBtn.classList.add('loading');
+      loginBtn.innerHTML = 'Signing In...';
+      
+      // Add success animation after a brief delay (simulate processing)
+      setTimeout(() => {
+        document.querySelector('.login-container').classList.add('success-animation');
+      }, 500);
+    });
+
+    // Enhanced input animations
+    document.querySelectorAll('.input-field').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.querySelector('.input-label').style.color = '#667eea';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.querySelector('.input-label').style.color = '#1e293b';
+      });
+
+      // Add ripple effect on focus
+      input.addEventListener('focus', function() {
+        createRipple(this);
+      });
+    });
+
+    // Ripple effect function
+    function createRipple(element) {
+      const ripple = document.createElement('div');
+      ripple.style.position = 'absolute';
+      ripple.style.width = '4px';
+      ripple.style.height = '4px';
+      ripple.style.background = 'rgba(102, 126, 234, 0.3)';
+      ripple.style.borderRadius = '50%';
+      ripple.style.transform = 'scale(0)';
+      ripple.style.animation = 'ripple 0.6s linear';
+      ripple.style.left = '50%';
+      ripple.style.top = '50%';
+      ripple.style.pointerEvents = 'none';
+      
+      element.parentElement.style.position = 'relative';
+      element.parentElement.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    }
+
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Floating particles on successful interaction
+    function createFloatingParticles() {
+      const colors = ['#667eea', '#764ba2', '#ffffff'];
+      for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = Math.random() * 6 + 3 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.borderRadius = '50%';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.opacity = '0.6';
+        particle.style.animation = `drift ${Math.random() * 4 + 3}s ease-in-out infinite`;
+        particle.style.zIndex = '5';
+        document.querySelector('.bg-elements').appendChild(particle);
+        
+        setTimeout(() => {
+          particle.remove();
+        }, 7000);
+      }
+    }
+
+    // Add subtle particle effects on form interaction
+    document.querySelectorAll('.input-field').forEach(input => {
+      input.addEventListener('focus', () => {
+        if (Math.random() > 0.8) createFloatingParticles();
+      });
+    });
+
+    // Keyboard navigation enhancement
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && e.target.classList.contains('input-field')) {
+        const inputs = Array.from(document.querySelectorAll('.input-field'));
+        const currentIndex = inputs.indexOf(e.target);
+        if (currentIndex < inputs.length - 1) {
+          inputs[currentIndex + 1].focus();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

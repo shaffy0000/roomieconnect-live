@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ room.title }} - Details</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #1a202c;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(45deg, #ffffff, #f0f8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 2;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .content {
+      padding: 3rem 2rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(102, 126, 234, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .info-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .info-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border-color: rgba(102, 126, 234, 0.4);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .info-label {
+      font-size: 0.95rem;
+      color: #667eea;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #2d3748;
+    }
+
+    .price-value {
+      color: #38a169;
+      font-size: 1.8rem;
+      font-weight: 900;
+    }
+
+    .description-section,
+    .facilities,
+    .images-section,
+    .reviews-section {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      border: 2px solid rgba(102, 126, 234, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .description-section:hover,
+    .facilities:hover,
+    .images-section:hover,
+    .reviews-section:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-color: rgba(102, 126, 234, 0.2);
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin-left: 1rem;
+    }
+
+    .description-text {
+      font-size: 1.1rem;
+      color: #4a5568;
+      line-height: 1.8;
+      background: rgba(102, 126, 234, 0.08);
+      padding: 2rem;
+      border-radius: 15px;
+      border-left: 5px solid #667eea;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .description-text::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .description-text:hover::before {
+      transform: translateX(100%);
+    }
+
+    .facilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .facility-item {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 30px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+      text-transform: capitalize;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .facility-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .facility-item:hover::before {
+      transform: translateX(100%);
+    }
+
+    .facility-item:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .image-container {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+    }
+
+    .image-container:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .image-container:hover img {
+      transform: scale(1.1);
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .image-container:hover .image-overlay {
+      opacity: 1;
+    }
+
+    .booking-form {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      border: 2px solid rgba(102, 126, 234, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .booking-form:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-color: rgba(102, 126, 234, 0.2);
+    }
+
+    .booking-form label {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.8rem;
+    }
+
+    .booking-form textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 120px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .booking-form textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .booking-form button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+      margin-top: 1.5rem;
+    }
+
+    .booking-form button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Reviews Section Styles */
+    .rating-display {
+      background: rgba(102, 126, 234, 0.08);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border-left: 5px solid #667eea;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .rating-display .avg-rating {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+
+    .rating-display .rating-text {
+      font-size: 1.1rem;
+      color: #4a5568;
+      font-weight: 600;
+    }
+
+    .review-form {
+      background: rgba(102, 126, 234, 0.05);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 2px solid rgba(102, 126, 234, 0.1);
+    }
+
+    .review-form h3 {
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .review-form .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .review-form label {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.8rem;
+    }
+
+    .review-form input[type="number"] {
+      width: 100px;
+      padding: 0.8rem;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .review-form input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .review-form textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 100px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .review-form textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .review-form button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .review-form button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .reviews-list {
+      margin-top: 2rem;
+    }
+
+    .reviews-list h3 {
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .review-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(102, 126, 234, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .review-card:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      border-color: rgba(102, 126, 234, 0.2);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .review-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .review-date {
+      font-size: 0.9rem;
+      color: #718096;
+      margin-left: auto;
+    }
+
+    .review-comment {
+      font-size: 1rem;
+      color: #4a5568;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .no-reviews {
+      text-align: center;
+      padding: 2rem;
+      color: #718096;
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-decoration: none;
+      padding: 1.2rem 2.5rem;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+      margin-top: 1.5rem;
+    }
+
+    .back-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+      text-decoration: none;
+      color: white;
+    }
+
+    .back-button::before {
+      content: '←';
+      font-size: 1.4rem;
+      transition: transform 0.3s ease;
+    }
+
+    .back-button:hover::before {
+      transform: translateX(-3px);
+    }
+
+    .no-images {
+      text-align: center;
+      padding: 4rem;
+      color: #718096;
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .header {
+        padding: 2rem 1.5rem;
+      }
+
+      .header h1 {
+        font-size: 2.2rem;
+      }
+
+      .content {
+        padding: 2rem 1.5rem;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .images-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .facilities-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .description-section,
+      .facilities,
+      .images-section,
+      .booking-form,
+      .reviews-section {
+        padding: 2rem;
+      }
+
+      .review-form {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 1.5rem;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .content {
+        padding: 1.5rem;
+      }
+
+      .info-card,
+      .description-section,
+      .facilities,
+      .images-section,
+      .booking-form,
+      .reviews-section {
+        padding: 1.5rem;
+      }
+
+      .review-form {
+        padding: 1.2rem;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+      }
+    }
+
+    /* Enhanced Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .container {
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .info-card {
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .info-card:nth-child(1) { animation-delay: 0.1s; }
+    .info-card:nth-child(2) { animation-delay: 0.2s; }
+    .info-card:nth-child(3) { animation-delay: 0.3s; }
+    .info-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .description-section {
+      animation: slideInLeft 0.8s ease;
+    }
+
+    .facilities {
+      animation: slideInRight 0.8s ease;
+    }
+
+    .images-section {
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .booking-form {
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .reviews-section {
+      animation: fadeInUp 0.8s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>{{ room.title }}</h1>
+      <div class="subtitle">Room Details & Information</div>
+    </div>
+    
+    <div class="content">
+      
+      <!-- Room Info -->
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">🏙️ City</div>
+          <div class="info-value">{{ room.city }}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">📍 Area</div>
+          <div class="info-value">{{ room.area }}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">💰 Monthly Rent</div>
+          <div class="info-value price-value">PKR {{ room.rent_amount }}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">🏠 Property Type</div>
+          <div class="info-value">Student Room</div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="description-section">
+        <h2 class="section-title">📝 Description</h2>
+        <div class="description-text">{{ room.description }}</div>
+      </div>
+
+      <!-- Facilities -->
+      <div class="facilities">
+        <h2 class="section-title">✨ Facilities & Amenities</h2>
+        <div class="facilities-grid">
+          {% for key, value in facilities.items() %}
+            {% if value and key != 'room_id' %}
+              <div class="facility-item">{{ key.replace('_', ' ').capitalize() }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div class="images-section">
+        <h2 class="section-title">📸 Room Images</h2>
+        {% if images and images|length > 0 %}
+          <div class="images-grid">
+            {% for img in images %}
+              <div class="image-container">
+                <img src="{{ img.image_url }}" alt="Room image">
+                <div class="image-overlay">View Image</div>
+              </div>
+            {% endfor %}
+          </div>
+        {% elif room.image_url %}
+          <div class="images-grid">
+            <div class="image-container">
+              <img src="{{ room.image_url }}" alt="Room image">
+              <div class="image-overlay">View Image</div>
+            </div>
+          </div>
+        {% else %}
+          <div class="no-images">📷 No images available for this room</div>
+        {% endif %}
+      </div>
+
+      <!-- Booking Form -->
+      <div class="booking-form">
+        <h2 class="section-title">📅 Book This Room</h2>
+        <form action="{{ url_for('start_chat') }}" method="post">
+            <input type="hidden" name="room_id" value="{{ room.id }}">
+            <input type="hidden" name="receiver_id" value="{{ room.owner_id }}">
+            <button type="submit">💬 Message Owner</button>
+        </form>
+
+        <form action="{{ url_for('book_room', room_id=room.id) }}" method="post">
+          <label for="message">Message to owner (optional):</label>
+          <textarea 
+            name="message" 
+            id="message" 
+            placeholder="Write a message to the owner..."
+          ></textarea>
+          <button type="submit">📅 Book Appointment / Send Request</button>
+        </form>
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="reviews-section">
+        <h2 class="section-title">⭐ Reviews & Ratings</h2>
+
+        <!-- Average Rating Display -->
+        <div class="rating-display">
+          {% if avg_rating %}
+            <div class="avg-rating">{{ avg_rating }}/5</div>
+            <div class="rating-text">Average Rating</div>
+          {% else %}
+            <div class="avg-rating">No ratings yet</div>
+            <div class="rating-text">Be the first to review!</div>
+          {% endif %}
+        </div>
+
+        <!-- Review Form -->
+        <div class="review-form">
+          <h3>Leave a Review</h3>
+          <form method="post" action="{{ url_for('add_review', room_id=room.id) }}">
+            <div class="form-group">
+              <label for="rating">Rating (1–5):</label>
+              <input type="number" id="rating" name="rating" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+              <label for="comment">Comment:</label>
+              <textarea id="comment" name="comment" placeholder="Write your review..."></textarea>
+            </div>
+            <button type="submit">Submit Review</button>
+          </form>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="reviews-list">
+          <h3>Recent Reviews</h3>
+          {% if reviews and reviews|length > 0 %}
+            {% for r in reviews %}
+              <div class="review-card">
+                <div class="review-header">
+                  <div class="review-rating">⭐ {{ r.rating }}</div>
+                  <div class="review-date">{{ r.created_at }}</div>
+                </div>
+                <div class="review-comment">{{ r.comment or "No comment provided" }}</div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="no-reviews">No reviews yet. Be the first to share your experience!</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <a href="{{ url_for('student_dashboard') }}" class="back-button">
+        ← Back to Rooms
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Image click functionality for full-size view
+    document.querySelectorAll('.image-container').forEach(container => {
+      container.addEventListener('click', function() {
+        const img = this.querySelector('img');
+        const overlay = document.createElement('div');
+        
+        overlay.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.9);
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          backdrop-filter: blur(5px);
+        `;
+        
+        const fullImg = document.createElement('img');
+        fullImg.src = img.src;
+        fullImg.style.cssText = `
+          max-width: 90%;
+          max-height: 90%;
+          object-fit: contain;
+          border-radius: 15px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+          animation: zoomIn 0.3s ease;
+        `;
+        
+        // Add zoom animation

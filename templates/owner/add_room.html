@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Room Listing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .file-input-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 16px;
+            background: #f3f4f6;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .file-input-label:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+        }
+
+        .file-input:focus + .file-input-label {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .facility-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .facility-item:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .facility-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .facility-item label {
+            cursor: pointer;
+            margin: 0;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .facility-item input[type="checkbox"]:checked + label {
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .facility-item:has(input[type="checkbox"]:checked) {
+            background: #eef2ff;
+            border-color: #4f46e5;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .price-input {
+            position: relative;
+        }
+
+        .price-input::before {
+            content: "PKR";
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .price-input input {
+            padding-left: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .facilities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-container {
+                padding: 20px 15px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Add Room Listing</h1>
+            <p>Fill out the details below to list your room</p>
+        </div>
+
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">🏷️ Room Title</label>
+                    <input type="text" id="title" name="title" required placeholder="Enter a catchy title for your room" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="location">📍 City</label>
+                        <input type="text" id="location" name="location" required placeholder="Enter city name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="area">🏘️ Area</label>
+                        <input type="text" id="area" name="area" placeholder="e.g., DHA Phase 4, Gulberg" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">📍 Complete Address</label>
+                    <input type="text" id="address" name="address" placeholder="Street address, building number, landmarks" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender_preference">🚻 Gender Preference</label>
+                        <select id="gender_preference" name="gender_preference">
+                            <option value="">No preference</option>
+                            <option value="male">Male only</option>
+                            <option value="female">Female only</option>
+                            <option value="mixed">Mixed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="room_type">🏠 Room Type</label>
+                        <select id="room_type" name="room_type">
+                            <option value="">Select room type</option>
+                            <option value="single">Single Room</option>
+                            <option value="shared">Shared Room</option>
+                            <option value="studio">Studio Apartment</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">💰 Monthly Rent</label>
+                    <div class="price-input">
+                        <input type="number" id="price" name="price" required placeholder="25000" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">📝 Description</label>
+                    <textarea id="description" name="description" placeholder="Describe your room, nearby facilities, house rules, and what makes it special..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">📸 Room Photos</label>
+                    <div class="file-input-container">
+                        <input type="file" id="image" name="image" accept="image/*" class="file-input" />
+                        <label for="image" class="file-input-label">📁 Choose Room Photos</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>✨ Facilities & Amenities</label>
+                    <div class="facilities-grid">
+                        <div class="facility-item">
+                            <input type="checkbox" id="wifi" name="wifi">
+                            <label for="wifi">📶 WiFi</label>
+                        </div>
+                        <div class="facility-item">
+                            <input type="checkbox" id="ac" name="ac">
+                            <label for="ac">❄️ Air Conditioning</label>
+                        </div>
+                        <div class="facility-item">
+                            <input type="checkbox" id="heater" name="heater">
+                            <label for="heater">🔥 Heater</label>
+                        </div>
+                        <div class="facility-item">
+                            <input type="checkbox" id="laundry" name="laundry">
+                            <label for="laundry">🧺 Laundry</label>
+                        </div>
+                        <div class="facility-item">
+                            <input type="checkbox" id="parking" name="parking">
+                            <label for="parking">🚗 Parking</label>
+                        </div>
+                        <div class="facility-item">
+                            <input type="checkbox" id="kitchen_access" name="kitchen_access">
+                            <label for="kitchen_access">🍳 Kitchen Access</label>
+                        </div>
+                        <div class="facility-item">
+                            <input type="checkbox" id="furnished" name="furnished">
+                            <label for="furnished">🛋️ Furnished</label>
+                        </div>
+                        <div class="facility-item">
+                            <input type="checkbox" id="security" name="security">
+                            <label for="security">🔒 Security</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">🚀 Add Room Listing</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // File input label change
+        const fileInput = document.getElementById('image');
+        const fileLabel = document.querySelector('.file-input-label');
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                fileLabel.textContent = '✅ ' + this.files[0].name;
+                fileLabel.style.color = '#059669';
+                fileLabel.style.borderColor = '#10b981';
+                fileLabel.style.background = '#ecfdf5';
+            } else {
+                fileLabel.textContent = '📁 Choose Room Photos';
+                fileLabel.style.color = '#6b7280';
+                fileLabel.style.borderColor = '#d1d5db';
+                fileLabel.style.background = '#f3f4f6';
+            }
+        });
+
+        // Form submission handling
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const btn = document.querySelector('.submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Adding Room...';
+        });
+
+        // Facility item click toggle
+        document.querySelectorAll('.facility-item').forEach(item => {
+            item.addEventListener('click', e => {
+                if (e.target.tagName !== 'INPUT') {
+                    const checkbox = item.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
+        });
+
+        // Form validation feedback
+        const inputs = document.querySelectorAll('input[required], select[required]');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.style.borderColor = '#ef4444';
+                    this.style.backgroundColor = '#fef2f2';
+                } else {
+                    this.style.borderColor = '#10b981';
+                    this.style.backgroundColor = '#f0fdf4';
+                }
+            });
+
+            input.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.style.borderColor = '#e5e7eb';
+                    this.style.backgroundColor = '#f9fafb';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
