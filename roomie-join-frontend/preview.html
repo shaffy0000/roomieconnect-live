@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomieJoin - Find Your Perfect Room & Roommate in Pakistan</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Plus Jakarta Sans', sans-serif; }
+        
+        /* Custom Tailwind Configuration */
+        .gradient-text {
+            background: linear-gradient(135deg, #5EA3CA 0%, #B6CDDB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* Animations */
+        @keyframes float1 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+        
+        @keyframes float2 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-30px, 30px) rotate(-120deg); }
+            66% { transform: translate(20px, -20px) rotate(-240deg); }
+        }
+        
+        @keyframes heartbeat {
+            0%, 50%, 100% { transform: scale(1); }
+            25%, 75% { transform: scale(1.1); }
+        }
+        
+        .animate-float-1 { animation: float1 20s ease-in-out infinite; }
+        .animate-float-2 { animation: float2 25s ease-in-out infinite; }
+        .animate-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+        
+        html { scroll-behavior: smooth; }
+        
+        /* Custom Colors */
+        .bg-primary { background-color: #5EA3CA; }
+        .bg-primary-light { background-color: #B6CDDB; }
+        .bg-primary-dark { background-color: #4A829F; }
+        .text-primary { color: #5EA3CA; }
+        .border-primary { border-color: #5EA3CA; }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5EA3CA',
+                        'primary-light': '#B6CDDB',
+                        'primary-dark': '#4A829F',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white">
+
+<!-- Navigation Bar -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-primary to-primary-light rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">R</span>
+                </div>
+                <span class="text-2xl font-bold gradient-text font-jakarta">RoomieJoin</span>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Features</a>
+                <a href="#how-it-works" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">How It Works</a>
+                <a href="#testimonials" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Reviews</a>
+                <a href="#contact" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Contact</a>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="hidden md:flex items-center space-x-4">
+                <button class="px-6 py-2 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300 font-medium">Login</button>
+                <button class="px-6 py-2 bg-gradient-to-r from-primary to-primary-light text-white rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 font-medium">Get Started</button>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-primary transition-colors duration-300">
+                    <i class="fas fa-bars w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-white pt-16">
+    <!-- Animated Background Orbs -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/20 to-primary-light/30 rounded-full animate-float-1"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-primary-light/20 to-primary/30 rounded-full animate-float-2"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 font-jakarta leading-tight">
+            Find Your Perfect 
+            <span class="gradient-text">Room & Roommate</span>
+            with Roomie
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Connect with verified students, discover safe accommodations, and build lasting friendships. 
+            Your journey to the perfect living space starts here.
+        </p>
+        
+        <!-- Primary CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16">
+            <button class="px-8 py-4 bg-gradient-to-r from-primary to-primary-light text-white rounded-xl font-semibold text-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center space-x-3">
+                <i class="fas fa-search w-5 h-5"></i>
+                <span>Find a Room</span>
+            </button>
+            <button class="px-8 py-4 border-2 border-primary text-primary rounded-xl font-semibold text-lg hover:bg-primary hover:text-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center space-x-3">
+                <i class="fas fa-home w-5 h-5"></i>
+                <span>List Your Room</span>
+            </button>
+        </div>
+        
+        <!-- AI Assistant Form -->
+        <div class="max-w-2xl mx-auto">
+            <div class="glassmorphism rounded-2xl p-8 shadow-xl">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 font-jakarta">Ask Our AI Assistant</h3>
+                <p class="text-gray-600 mb-6">Get instant answers about finding roommates, room requirements, or area recommendations</p>
+                
+                <div class="space-y-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Ask me anything about finding accommodation..." class="w-full px-6 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800 placeholder-gray-500 bg-white/80">
+                        <button class="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-gradient-to-r from-primary to-primary-light text-white rounded-lg hover:shadow-lg transition-all duration-300">
+                            <i class="fas fa-paper-plane w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-20 bg-gradient-to-r from-gray-50 to-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-jakarta">Trusted by Thousands of Students</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Join our growing community of verified students and property owners across Pakistan</p>
+            </div>
+            
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center group hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center group-hover:shadow-xl transition-all duration-300">
+                            <i class="fas fa-user-check w-8 h-8 text-blue-500 group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-4xl md:text-5xl font-bold text-gray-900">5000+</span>
+                    </div>
+                    <p class="text-gray-600 font-medium text-lg">Verified Students</p>
+                </div>
+                
+                <div class="text-center group hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center group-hover:shadow-xl transition-all duration-300">
+                            <i class="fas fa-home w-8 h-8 text-green-500 group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-4xl md:text-5xl font-bold text-gray-900">1200+</span>
+                    </div>
+                    <p class="text-gray-600 font-medium text-lg">Available Rooms</p>
+                </div>
+                
+                <div class="text-center group hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center group-hover:shadow-xl transition-all duration-300">
+                            <i class="fas fa-handshake w-8 h-8 text-purple-500 group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-4xl md:text-5xl font-bold text-gray-900">3500+</span>
+                    </div>
+                    <p class="text-gray-600 font-medium text-lg">Successful Matches</p>
+                </div>
+                
+                <div class="text-center group hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center group-hover:shadow-xl transition-all duration-300">
+                            <i class="fas fa-city w-8 h-8 text-orange-500 group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-4xl md:text-5xl font-bold text-gray-900">15+</span>
+                    </div>
+                    <p class="text-gray-600 font-medium text-lg">Cities</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <div class="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">WHY CHOOSE ROOMIEJOIN</div>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 font-jakarta">
+                Features That Make Us <span class="gradient-text">Different</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Discover why thousands of students trust RoomieJoin to find their perfect living space and build lasting connections across Pakistan.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-shield-alt w-8 h-8 text-blue-500 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 font-jakarta group-hover:text-primary transition-colors duration-300">100% Verified Profiles</h3>
+                <p class="text-gray-600 leading-relaxed">Every user undergoes thorough verification including university enrollment, ID verification, and background checks to ensure your safety and security.</p>
+            </div>
+            
+            <div class="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-venus-mars w-8 h-8 text-pink-500 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 font-jakarta group-hover:text-primary transition-colors duration-300">Gender-Based Filtering</h3>
+                <p class="text-gray-600 leading-relaxed">Respecting cultural values with sophisticated filtering options for gender-specific accommodations and roommate preferences.</p>
+            </div>
+            
+            <div class="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-rupee-sign w-8 h-8 text-green-500 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 font-jakarta group-hover:text-primary transition-colors duration-300">Smart Budget Matching</h3>
+                <p class="text-gray-600 leading-relaxed">Advanced algorithms match you with rooms and roommates within your budget range, including utilities and additional costs.</p>
+            </div>
+            
+            <div class="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-comments w-8 h-8 text-indigo-500 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 font-jakarta group-hover:text-primary transition-colors duration-300">Secure Real-Time Chat</h3>
+                <p class="text-gray-600 leading-relaxed">Connect instantly with potential roommates through our secure messaging system with built-in safety features and moderation.</p>
+            </div>
+            
+            <div class="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-red-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-brain w-8 h-8 text-orange-500 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 font-jakarta group-hover:text-primary transition-colors duration-300">AI-Powered Matching</h3>
+                <p class="text-gray-600 leading-relaxed">Our intelligent system learns your preferences and lifestyle to suggest the most compatible roommates and ideal living spaces.</p>
+            </div>
+            
+            <div class="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-cyan-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-map-marker-alt w-8 h-8 text-teal-500 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 font-jakarta group-hover:text-primary transition-colors duration-300">Location-Based Search</h3>
+                <p class="text-gray-600 leading-relaxed">Find accommodations near your university, workplace, or preferred areas with detailed neighborhood information and transport links.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="relative py-20 bg-gradient-to-br from-primary via-primary-light to-primary-dark overflow-hidden">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-float-1"></div>
+        <div class="absolute top-1/2 right-20 w-24 h-24 bg-white/15 rounded-full animate-float-2"></div>
+        <div class="absolute bottom-20 left-1/3 w-40 h-40 bg-white/5 rounded-full animate-float-1"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-6 border border-white/30">
+                🎉 LIMITED TIME OFFER
+            </div>
+            
+            <h2 class="text-4xl md:text-6xl font-bold text-white mb-6 font-jakarta leading-tight">
+                Your Perfect Room is<br>
+                <span class="text-yellow-300">Just One Click Away</span>
+            </h2>
+            
+            <p class="text-xl md:text-2xl text-white/90 mb-12 leading-relaxed max-w-3xl mx-auto">
+                Join over 5,000 verified students who found their ideal accommodation through RoomieJoin. 
+                Safe, verified, and culturally appropriate housing solutions across Pakistan.
+            </p>
+            
+            <div class="mb-12">
+                <button class="group inline-flex items-center space-x-4 px-12 py-6 bg-white text-primary rounded-2xl font-bold text-xl hover:bg-yellow-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 transform">
+                    <i class="fas fa-rocket w-6 h-6 group-hover:animate-bounce"></i>
+                    <span>Start Your Journey Today</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer id="contact" class="bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-primary to-primary-light rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">R</span>
+                        </div>
+                        <span class="text-3xl font-bold gradient-text font-jakarta">RoomieJoin</span>
+                    </div>
+                    
+                    <p class="text-gray-300 leading-relaxed mb-6 max-w-md">
+                        Pakistan's trusted platform for students to find safe, verified, and culturally 
+                        appropriate accommodation. Connecting students with perfect roommates since 2024.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-r hover:from-primary hover:to-primary-light hover:-translate-y-1 hover:shadow-lg">
+                                <i class="fab fa-facebook w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-r hover:from-primary hover:to-primary-light hover:-translate-y-1 hover:shadow-lg">
+                                <i class="fab fa-twitter w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-r hover:from-primary hover:to-primary-light hover:-translate-y-1 hover:shadow-lg">
+                                <i class="fab fa-instagram w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-r hover:from-primary hover:to-primary-light hover:-translate-y-1 hover:shadow-lg">
+                                <i class="fab fa-linkedin w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">Find Rooms</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">List Property</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">How It Works</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">Success Stories</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">Help Center</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">Safety Tips</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">Contact Support</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Get in Touch</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-envelope w-5 h-5 text-primary mt-1"></i>
+                            <div>
+                                <p class="text-gray-300">Email</p>
+                                <a href="mailto:support@roomiejoin.com" class="text-white hover:text-primary transition-colors duration-300">support@roomiejoin.com</a>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-phone w-5 h-5 text-primary mt-1"></i>
+                            <div>
+                                <p class="text-gray-300">Phone</p>
+                                <a href="tel:+923001234567" class="text-white hover:text-primary transition-colors duration-300">+92 300 123 4567</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-800 py-8">
+            <div class="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
+                <div class="text-gray-300 text-center lg:text-left">
+                    <p>
+                        © 2024 RoomieJoin. Made with 
+                        <i class="fas fa-heart w-4 h-4 text-red-500 animate-heartbeat mx-1"></i>
+                        in Pakistan. All rights reserved.
+                    </p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300 text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-300 hover:text-primary transition-colors duration-300 text-sm">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function toggleMobileMenu() {
+        // Mobile menu toggle functionality would go here
+        console.log('Mobile menu toggle');
+    }
+</script>
+
+</body>
+</html>
